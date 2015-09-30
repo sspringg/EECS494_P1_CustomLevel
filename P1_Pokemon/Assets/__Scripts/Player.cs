@@ -28,6 +28,8 @@ public class Player : MonoBehaviour {
 	public int enemyNo;
 	public float 	moveSpeed;
 	public int		tileSize;
+	public int spacesMoved;
+	public int moveLim;
 	
 	public SpriteRenderer	sprend;
 	public	Sprite	upSprite;
@@ -64,6 +66,8 @@ public class Player : MonoBehaviour {
 	
 	void Start(){
 		sprend = gameObject.GetComponent<SpriteRenderer>();
+		spacesMoved = 0;
+		moveLim = 100;
 		PokemonObject.start ();
 		pokemon_list = new PokemonObject[6];
 		pokemon_list [0] = PokemonObject.getPokemon ("None");
@@ -177,6 +181,7 @@ public class Player : MonoBehaviour {
 			if((targetPos - pos).magnitude < moveSpeed * Time.fixedDeltaTime){
 				pos = targetPos; //around min 17
 				moving = false;
+				++spacesMoved;
 			}
 			else{
 				pos += (targetPos - pos).normalized * moveSpeed * Time.fixedDeltaTime;
