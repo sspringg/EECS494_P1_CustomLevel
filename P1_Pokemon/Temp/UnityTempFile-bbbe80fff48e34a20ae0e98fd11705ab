@@ -106,6 +106,7 @@
 'Assets/__Scripts/ShowMapOnCamera.cs'
 'Assets/__Scripts/Tile.cs'
 'Assets/__Scripts/TurnActionViewer.cs'
+'Assets/__Scripts/Turn_Choice_Menu.cs'
 'Assets/__Scripts/Wild_Pokemon.cs'
 -r:'/Applications/Unity.app/Contents/Frameworks/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
 -r:'/Applications/Unity.app/Contents/Frameworks/Mono/lib/mono/unity/System.Xml.Linq.dll'

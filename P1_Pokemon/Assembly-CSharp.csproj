@@ -77,6 +77,7 @@
      <Compile Include="Assets\__Scripts\ShowMapOnCamera.cs" />
      <Compile Include="Assets\__Scripts\Tile.cs" />
      <Compile Include="Assets\__Scripts\TurnActionViewer.cs" />
+     <Compile Include="Assets\__Scripts\Turn_Choice_Menu.cs" />
      <Compile Include="Assets\__Scripts\Wild_Pokemon.cs" />
      <None Include="Assets\Collision.txt" />
      <None Include="Assets\spriteText.txt" />
