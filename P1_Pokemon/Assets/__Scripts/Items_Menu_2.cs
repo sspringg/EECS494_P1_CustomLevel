@@ -41,18 +41,10 @@ public class Items_Menu_2 : MonoBehaviour {
 						Color noAlpha = GameObject.Find("DialogBackground").GetComponent<GUITexture>().color;
 						noAlpha.a = 255;
 						GameObject.Find("DialogBackground").GetComponent<GUITexture>().color = noAlpha;
-						print("length " + Player.S.pokemon_list.Length);
-						if(Player.S.pokemon_list[0].pkmnName != "None"){
-							Menu.S.pokemon_menu_active = true;
-							Pokemon_Menu.S.gameObject.SetActive(true);
-							Dialog.S.ShowMessage("Use on which POKeMON?");
-							usingItem = true;
-						}
-						else{
-							Dialog.S.ShowMessage("No pokemon to use on");
-							Menu.S.menuPaused = false;
-							Menu.S.items_menu_active = false;
-						}
+						print("length " + Player.S.pokemon_list.Count);
+						Pokemon_Menu.S.gameObject.SetActive(true);
+						Dialog.S.ShowMessage("Use on which POKeMON?");
+						usingItem = true;
 						Items_Menu.S.Items_Menu_2_active = false;
 						Items_Menu.S.items_menu_paused = false;
 						Items_Menu.S.gameObject.SetActive(false);
