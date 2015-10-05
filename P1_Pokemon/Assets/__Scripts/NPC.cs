@@ -17,7 +17,7 @@ public class NPC : MonoBehaviour {
 	public bool	allowedToMove;
 	private float randomVal;
 	private	int	dictionaryPos;
-	public bool trainer;
+	
 	public UnityEngine.Random random = new UnityEngine.Random();
 	
 	public float chanceToMove = 1;
@@ -29,8 +29,6 @@ public class NPC : MonoBehaviour {
 	}
 	public void Play_Dialog(string playerName){
 		string sentance = TalkTo(playerName);
-		if(sentance == "EXIT")
-			return;
 		Dialog.S.gameObject.SetActive(true);
 		Color noAlpha = GameObject.Find("DialogBackground").GetComponent<GUITexture>().color;
 		noAlpha.a = 255;
@@ -80,7 +78,7 @@ public class NPC : MonoBehaviour {
 				}
 			}
 		}
-		if(moveTowardPlayer && !Main.S.inDialog){
+		if(moveTowardPlayer && !Main.S.inDialog){;
 			if((gameObject.transform.position.x - Player.S.transform.position.x) > 1){
 				transform.position += Vector3.left * (Time.deltaTime * 4);
 			}
@@ -110,10 +108,8 @@ public class NPC : MonoBehaviour {
 					Player.S.sprend.sprite = Player.S.upSprite;
 				else if(Player.S.transform.position.y > gameObject.transform.position.y)
 					Player.S.sprend.sprite = Player.S.downSprite;
-				if(trainer){
-					Player.S.inScene0 = false;
-					Application.LoadLevelAdditive("_Scene_2");
-				}
+				Player.S.inScene0 = false;
+				Application.LoadLevelAdditive("_Scene_2");
 			}
 		}
 	}
@@ -121,6 +117,7 @@ public class NPC : MonoBehaviour {
 		if (!Player.S.speakDictionary.ContainsKey(playerName)) {
 			Player.S.speakDictionary.Add(playerName, -1);
 		}
+		print(playerName);
 		if(playerName == "Professor_Oak"){
 			dictionaryPos = Player.S.speakDictionary["Professor_Oak"];
 			if(Player.S.itemsDictionary.ContainsKey("Prof_Oak_Package"))
@@ -390,7 +387,7 @@ public class NPC : MonoBehaviour {
 					return "";
 				case 0:
 					Player.S.playerSpeaking = null;
-					Player.S.speakDictionary["Mom"] = -1;
+				Player.S.speakDictionary["Mom"] = -1;
 					return "Mom: It's time to go out and explore the world";
 				case 1:
 					Player.S.speakDictionary["Mom"] = 2;
@@ -403,7 +400,7 @@ public class NPC : MonoBehaviour {
 					return "...";
 				case 4:
 					Player.S.speakDictionary["Mom"] = 1;
-					for(int i = 0; i < Player.S.pokemon_list.Count; ++i){
+					for(int i = 0; i < Player.S.pokemon_list.Length; ++i){
 						PokemonObject po = Player.S.pokemon_list[i];
 						if (po == null) continue;
 						Player.S.pokemon_list[i].curHp = Player.S.pokemon_list[i].totHp;
@@ -412,70 +409,7 @@ public class NPC : MonoBehaviour {
 					return "You and your pokemon are looking great, take care now";
 			}
 		}
-		else if(playerName == "Grass_Shield"){
-			switch(Player.S.speakDictionary["Grass_Shield"]){
-				case -1:
-					Player.S.speakDictionary["Grass_Shield"] = 2;
-					return "Blue: You think you are so mighty with your new pokemon from Gramps?";
-				case 2:
-					Player.S.speakDictionary["Grass_Shield"] = 3;
-					return "Blue: Well now its time for me to teach you who is really boss in this town";
-				case 3:
-					Player.S.speakDictionary["Grass_Shield"] = 4;
-					return "Blue: You vs me, race to Viridian city";
-				case 4:
-					Player.S.speakDictionary["Grass_Shield"] = 5;
-					return "Blue: We will take turns moving where each move...";
-				case 5:
-					Player.S.speakDictionary["Grass_Shield"] = 6;
-					return "Blue: you can select 1 of 4 choices";
-				case 6:
-					Player.S.speakDictionary["Grass_Shield"] = 7;
-					return "1: Move a total number of steps as rolled by the die";
-				case 7:
-					Player.S.speakDictionary["Grass_Shield"] = 8;
-					return "2: Place one of your POKeMON at a location in the field...";
-				case 8:
-					Player.S.speakDictionary["Grass_Shield"] = 9;
-					return "If I run into it while moving, I will have to stop and fight...";
-				case 9:
-					Player.S.speakDictionary["Grass_Shield"] = 10;
-					return "but be careful...";
-				case 10:
-					Player.S.speakDictionary["Grass_Shield"] = 11;
-					return "becaue after the POKeMON fights, it will run away";
-				case 11:
-					Player.S.speakDictionary["Grass_Shield"] = 13;
-					return "3: Use an item on a POKeMON to help heal them";
-				case 13:
-					Player.S.speakDictionary["Grass_Shield"] = 14;
-					return "4: Call me to battle you. ";
-				case 14:
-					Player.S.speakDictionary["Grass_Shield"] = 15;
-					return "This can only be done if you are in front of me because I will come to your location";
-				case 15:
-					Player.S.speakDictionary["Grass_Shield"] = 16;
-					return "If you win, I will give you $250 to buy items";
-				case 16:
-					Player.S.speakDictionary["Grass_Shield"] = 17;
-					return "and if at any point either in Trainer or POKeMON battle all of...";
-				case 17:
-					Player.S.speakDictionary["Grass_Shield"] = 18;
-					return "a players POKeMON faint, they will be reset back to the previous checkpoint";
-				case 18:
-					Player.S.speakDictionary["Grass_Shield"] = 19;
-					return "You can open the main menu at any point to check your POKeMON health and buy new items";
-				case 19:
-					Player.S.speakDictionary["Grass_Shield"] = 20;
-					return "Let the race begin. Your turn first";
-				case 20:
-					Player.S.playerSpeaking = null;
-					Player.S.OpeningDialog = true;
-					Grass_Shield.S.gameObject.SetActive(false);
-					Player.S.speakDictionary["Grass_Shield"] = -1;
-					return "EXIT";
-			}
-		}
+		Player.S.playerSpeaking = null;
 		return "";		
 	}
 

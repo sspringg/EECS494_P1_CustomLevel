@@ -19,7 +19,7 @@ public class Player : MonoBehaviour {
 
 //initilizing variable
 	public static Player S;
-	public List<PokemonObject> pokemon_list = new List<PokemonObject>();
+	public PokemonObject[] pokemon_list;
 	public PokemonObject BC_pkmn;
 	public PokemonObject Lass_pkmn;
 	public PokemonObject YS_pkmn;
@@ -44,7 +44,6 @@ public class Player : MonoBehaviour {
 	public bool		fought_BC = false;
 	public bool		fought_Lass = false;
 	public bool		fought_YS = false;
-	public bool		OpeningDialog = false;
 	public bool		inScene0 = true;
 	
 	public bool		Healing_Pokemon = false;
@@ -68,14 +67,15 @@ public class Player : MonoBehaviour {
 	void Start(){
 		sprend = gameObject.GetComponent<SpriteRenderer>();
 		spacesMoved = 0;
-		moveLim = 15;
+		moveLim = 100;
 		PokemonObject.start ();
-		pokemon_list.Add(PokemonObject.getPokemon ("None"));
-		pokemon_list.Add(PokemonObject.getPokemon ("None"));
-		pokemon_list.Add(PokemonObject.getPokemon ("None"));
-		pokemon_list.Add(PokemonObject.getPokemon ("None"));
-		pokemon_list.Add(PokemonObject.getPokemon ("None"));
-		pokemon_list.Add(PokemonObject.getPokemon ("None"));
+		pokemon_list = new PokemonObject[6];
+		pokemon_list [0] = PokemonObject.getPokemon ("None");
+		pokemon_list [1] = PokemonObject.getPokemon ("None");
+		pokemon_list [2] = PokemonObject.getPokemon ("None");
+		pokemon_list [3] = PokemonObject.getPokemon ("None");
+		pokemon_list [4] = PokemonObject.getPokemon ("None");
+		pokemon_list [5] = PokemonObject.getPokemon ("None");
 		BC_pkmn = PokemonObject.getPokemon ("Caterpie");
 		Lass_pkmn = PokemonObject.getPokemon ("Squirtle");
 		Lass_pkmn.level = 3;
@@ -91,8 +91,7 @@ public class Player : MonoBehaviour {
 		YS_pkmn.def -= 10;
 		wildPkmn1 = PokemonObject.getPokemon ("Caterpie");
 		wildPkmn2 = PokemonObject.getPokemon ("Caterpie");
-		itemsDictionary ["POKeBALL"] = 2;
-		itemsDictionary["Potion"] = 2;
+		itemsDictionary ["POKeBALL"] = 10;
 	}
 	
 	new public Rigidbody rigidbody{
@@ -107,8 +106,35 @@ public class Player : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.A)){ //min 40
 				CheckForAction();
 			}
+			///ACTIONS IF PLAYER COMES INTO LINE OF SIGHT OF TRAINERS
+			//these actions need to come before arrows become they need to happen even if trying to move 
+			else if(Physics.Raycast(gameObject.transform.position, Vector3.left, out hitInfo, 6f, GetLayerMask(new string[] {"Bug_Catcher"})) && !fought_BC){
+				fought_BC = true;
+				NPC npc = hitInfo.collider.gameObject.GetComponent<NPC>();
+				moving = false;
+				npc.moveTowardPlayer = true;
+				npc.Play_Dialog("Bug_Catcher");
+				enemyNo = 1;
+			}
+			else if(Physics.Raycast(gameObject.transform.position, Vector3.right, out hitInfo, 10f, GetLayerMask(new string[] {"Lass"})) && !fought_Lass){
+				fought_Lass = true;
+				NPC npc = hitInfo.collider.gameObject.GetComponent<NPC>();
+				moving = false;
+				npc.moveTowardPlayer = true;
+				npc.Play_Dialog("Lass");
+				enemyNo = 2;
+			}
+			else if((Physics.Raycast(gameObject.transform.position, Vector3.left, out hitInfo, 8f, GetLayerMask(new string[] {"Youngster"})) || 
+					Physics.Raycast(gameObject.transform.position, Vector3.down, out hitInfo, 5f, GetLayerMask(new string[] {"Youngster"})))&& !fought_YS){
+				fought_YS = true;
+				NPC npc = hitInfo.collider.gameObject.GetComponent<NPC>();
+				moving = false;
+				npc.moveTowardPlayer = true;
+				npc.Play_Dialog("Youngster");
+				enemyNo = 3;
+			}
 //ARROW KEYS		
-			else if(Input.GetKey(KeyCode.RightArrow)){
+			if(Input.GetKey(KeyCode.RightArrow)){
 				moveVec = Vector3.right;
 				direction = Direction.right;
 				sprend.sprite = rightSprite;
@@ -148,7 +174,7 @@ public class Player : MonoBehaviour {
 			else if(Physics.Raycast(GetRay(), out hitInfo, 1f, GetLayerMask(new string[] {"Immovable", "NPC", "Lass", "Youngster", "Bug_Catcher", "Ledge"}))){
 				moveVec = Vector3.zero;
 				moving = false;
-			}
+			};
 			targetPos = pos + moveVec;
 		}
 		else{
@@ -164,7 +190,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	public void CheckForAction(){
-		if(Physics.Raycast(GetRay(), out hitInfo, 2f, GetLayerMask(new string[] {"NPC", "Bug_Catcher", "Lass", "Youngster"}))){
+		if(Physics.Raycast(GetRay(), out hitInfo, 1f, GetLayerMask(new string[] {"NPC", "Bug_Catcher", "Lass", "Youngster"}))){
 			NPC npc = hitInfo.collider.gameObject.GetComponent<NPC>();
 			npc.FacePlayer(direction);
 			playerSpeaking = npc.name;
