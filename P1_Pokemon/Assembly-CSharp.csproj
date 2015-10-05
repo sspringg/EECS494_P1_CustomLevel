@@ -61,6 +61,7 @@
      <Compile Include="Assets\__Scripts\Grass_Shield.cs" />
      <Compile Include="Assets\__Scripts\HPSwitchTxt.cs" />
      <Compile Include="Assets\__Scripts\Heal_Pokemon.cs" />
+     <Compile Include="Assets\__Scripts\Intro.cs" />
      <Compile Include="Assets\__Scripts\Items_Menu.cs" />
      <Compile Include="Assets\__Scripts\Items_Menu_2.cs" />
      <Compile Include="Assets\__Scripts\LevelUpViewer.cs" />
